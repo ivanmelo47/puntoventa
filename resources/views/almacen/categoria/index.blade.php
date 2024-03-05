@@ -56,7 +56,7 @@
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th>Opciones Update</th>
+                                    <th>Opciones</th>
                                     <th>Id</th>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
