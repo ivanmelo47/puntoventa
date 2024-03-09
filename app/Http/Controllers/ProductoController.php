@@ -7,7 +7,9 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use App\Http\Requests\ProductoFormRequest;
 use Illuminate\Support\Str;
-use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
@@ -74,8 +76,16 @@ class ProductoController extends Controller
             $imagen = $request->file('imagen');
             $nombreImagen = Str::random(70) . '.' . $imagen->guessExtension();
 
+            // Guarda la imagen en la ruta especificada
+            $imagenGuardada = Image::make($imagen->getRealPath());
 
-            copy($imagen->getRealPath(), $ruta . $nombreImagen);
+            // Redimensiona la imagen a 200x300px manteniendo la relación de aspecto
+            $imagenGuardada->fit(200, 300, function ($constraint) {
+                $constraint->upsize(); // Evita estirar la imagen
+            });
+
+            // Guarda la imagen redimensionada
+            $imagenGuardada->save($ruta . $nombreImagen);
 
             $producto->imagen = $nombreImagen;
         }
