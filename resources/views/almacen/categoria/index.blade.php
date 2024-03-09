@@ -66,13 +66,14 @@
                                 @foreach ($categorias as $cat)
                                     <tr>
                                         <td>
-                                            <a href="#" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"><i class="bi bi-trash3"></i></button>
+                                            <a href="{{ route('categoria.edit', $cat->id_categoria) }}" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$cat->id_categoria}}"><i class="bi bi-trash3"></i></button>
                                         </td>
                                         <td>{{ $cat->id_categoria }}</td>
                                         <td>{{ $cat->categoria }}</td>
                                         <td>{{ $cat->descripcion }}</td>
                                     </tr>
+                                    @include('almacen.categoria.modal') {{-- Se trata de la notificacion para confirmar la eliminacion de una categoria --}}
                                 @endforeach
                             </tbody>
                         </table>

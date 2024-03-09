@@ -27,6 +27,9 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
   <!-- BootStrp Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Estilos Propios -->
+  <link rel="stylesheet" href="{{ asset('css/propio.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -423,5 +426,19 @@
 <script src="{{ asset('dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('dist/js/pages/dashboard.js')}}"></script>
+
+<script src="{{ asset('js/lightbox.js')}}"></script>
+
+<!-- Para botones Cancelar y volver a la pagina anterior -->
+<script>
+    // Obtener el botón por su ID
+    var botonCancelar = document.getElementById('botonCancelar');
+
+    // Agregar un evento de clic al botón
+    botonCancelar.addEventListener('click', function() {
+      // Volver a la página anterior
+      window.history.back();
+    });
+</script>
 </body>
 </html>

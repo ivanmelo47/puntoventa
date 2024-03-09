@@ -1,0 +1,19 @@
+.producto-imagen {
+    width: 100px;
+    /* Ancho deseado */
+    height: 100px;
+    /* Altura deseada */
+    overflow: hidden;
+    /* Ocultar cualquier parte de la imagen que se desborde del contenedor */
+    border-radius: 5px;
+    /* Añadir esquinas redondeadas si es necesario */
+}
+
+.producto-imagen img {
+    width: 100%;
+    /* Hacer que la imagen ocupe todo el espacio disponible en el contenedor */
+    height: auto;
+    /* Ajustar automáticamente la altura para mantener la proporción de la imagen */
+    display: block;
+    /* Asegurarse de que la imagen no tenga espacios extra alrededor */
+}
