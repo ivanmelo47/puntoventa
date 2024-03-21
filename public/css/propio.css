@@ -17,3 +17,19 @@
     display: block;
     /* Asegurarse de que la imagen no tenga espacios extra alrededor */
 }
+
+.dataTables_length{
+    padding-left: 1rem
+}
+
+.dataTables_filter{
+    padding-right: 1rem;
+}
+
+.dataTables_info{
+    padding-left: 1rem
+}
+
+.dataTables_paginate{
+    padding-right: 1rem;
+}

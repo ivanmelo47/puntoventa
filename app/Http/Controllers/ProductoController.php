@@ -7,11 +7,11 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use App\Http\Requests\ProductoFormRequest;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\File;
 
 class ProductoController extends Controller
 {
@@ -22,21 +22,13 @@ class ProductoController extends Controller
 
     public function index(Request $request)
     {
-        $texto = $request->input('texto');
-
         // Realiza la consulta de productos con la relación 'RELACION CARGADA'
-        $productos = Producto::with('categoria');
-
-        // Verificar si se ha proporcionado algún texto de búsqueda
-        if ($texto) {
-            $productos->where('nombre', 'LIKE', '%' . $texto . '%');
-            // Puedes agregar más condiciones según tus necesidades
-        }
+        $productos = Producto::with('categoria')/* ->where('estatus', '=', '1') */;
 
         // Obtener los resultados de la consulta
-        $producto = $productos->paginate(7); // Número de elementos por página
+        $producto = $productos->get(); // Número de elementos por página
 
-        return view('almacen.producto.index', compact('producto', 'texto'));
+        return view('almacen.producto.index', compact('producto'));
     }
 
     /**
@@ -73,19 +65,14 @@ class ProductoController extends Controller
         }
         //Guardar Imagen en el servidor
         if ($request->hasFile('imagen')) {
+            $manager = new ImageManager(new Driver());
             $imagen = $request->file('imagen');
             $nombreImagen = Str::random(70) . '.' . $imagen->guessExtension();
-
-            // Guarda la imagen en la ruta especificada
-            $imagenGuardada = Image::make($imagen->getRealPath());
-
-            // Redimensiona la imagen a 200x300px manteniendo la relación de aspecto
-            $imagenGuardada->fit(200, 300, function ($constraint) {
-                $constraint->upsize(); // Evita estirar la imagen
-            });
+            $img = $manager->read($imagen);
+            $img = $img->resize(600);
 
             // Guarda la imagen redimensionada
-            $imagenGuardada->save($ruta . $nombreImagen);
+            $img->toJpeg(100)->save($ruta.$nombreImagen);
 
             $producto->imagen = $nombreImagen;
         }
@@ -106,24 +93,64 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         //
+        $categorias = Categoria::where('estatus', 1)->orderBy('id_categoria', 'desc')->get();
+        return view('almacen.producto.edit', ["producto"=>Producto::findOrFail($id)], compact('categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductoFormRequest $request, $id)
     {
-        //
+        //Captura de datos nuevos
+        $producto=Producto::findOrFail($id);
+        $producto->id_categoria=$request->get("id_categoria");
+        $producto->codigo=$request->get("codigo");
+        $producto->nombre=$request->get("nombre");
+        $producto->stock=$request->get("stock");
+        $producto->descripcion=$request->get("descripcion");
+
+        //Guardar Imagen en el servidor
+        $ruta = public_path('/imagenes/productos/');
+        if ($request->hasFile('imagen')) {
+
+            // Verificar si el producto tiene una imagen asociada
+            if ($producto->imagen) {
+                // Eliminar la imagen anterior del servidor
+                if (File::exists($ruta.$producto->imagen)) {
+                    File::delete($ruta.$producto->imagen);
+                }
+            }
+
+            $manager = new ImageManager(new Driver());
+            $imagen = $request->file('imagen');
+            $nombreImagen = Str::random(70) . '.' . $imagen->guessExtension();
+            $img = $manager->read($imagen);
+            $img = $img->resize(600);
+
+            // Guarda la imagen redimensionada
+            $img->toJpeg(100)->save($ruta.$nombreImagen);
+
+            $producto->imagen = $nombreImagen;
+        }
+
+        // Actualizar el producto en la base de datos
+        $producto->update();
+        return Redirect::to("almacen/producto");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         //
+        $producto=Producto::findOrFail($id);
+        $producto->estatus='0';
+        $producto->update();
+        return Redirect::to("almacen/producto");
     }
 }

@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
   <!-- BootStrp Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Incluir CSS de DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
   <!-- Estilos Propios -->
   <link rel="stylesheet" href="{{ asset('css/propio.css') }}">
   <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
@@ -427,7 +429,45 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('dist/js/pages/dashboard.js')}}"></script>
 
+<!-- Imagen Flotante -->
 <script src="{{ asset('js/lightbox.js')}}"></script>
+
+<!-- Incluir jQuery y JavaScript de DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    // Configurar DataTables en español con paginación de 5 en 5
+    $(document).ready(function() {
+        $('#miTablaPagina5').DataTable({
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            "pageLength": 5, // Establecer el número de elementos por página
+            "lengthMenu": [5, 10, 25, 50] // Opciones de longitud de página
+        });
+    });
+</script>
 
 <!-- Para botones Cancelar y volver a la pagina anterior -->
 <script>
@@ -440,5 +480,19 @@
       window.history.back();
     });
 </script>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var previewImg = document.querySelector('.preview-img');
+            var previewLink = document.querySelector('.preview-link');
+            previewImg.src = reader.result;
+            previewLink.href = reader.result; // Actualiza el href del enlace para que apunte a la nueva imagen
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
 </body>
 </html>

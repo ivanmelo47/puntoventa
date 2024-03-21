@@ -32,17 +32,6 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="input-group mb-6">
                                             <span class="input-group-text" id="basic-addon1"><i
-                                                    class="bi bi-search"></i></span>
-                                            <input type="text" name="texto" id="" class="form-control"
-                                                placeholder="Buscar Productos" value="{{ $texto }}"
-                                                aria-label="Recipient's username" aria-describedby="button-addon2">
-                                            <button type="submit" class="btn btn-outline-secondary"
-                                                id="button-addon2">Buscar</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="input-group mb-6">
-                                            <span class="input-group-text" id="basic-addon1"><i
                                                     class="bi bi-plus-circle-fill"></i></span>
                                             <a href="{{ route('producto.create') }}" class="btn btn-success">Nuevo</a>
                                         </div>
@@ -58,7 +47,7 @@
                         </div>
                         <!-- table hover -->
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                            <table id="miTablaPagina5" class="table table-hover mb-0">
                                 <thead>
                                     <tr>
                                         <th>Opciones</th>
@@ -75,10 +64,9 @@
                                     @foreach ($producto as $prod)
                                         <tr>
                                             <td>
-                                                <a href="{{-- {{ route('producto.edit', $prod->id_producto) }} --}}" class="btn btn-warning btn-sm"><i
+                                                <a href="{{ route('producto.edit', $prod->id_producto) }}" class="btn btn-warning btn-sm"><i
                                                         class="fas fa-pen"></i></a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm"
-                                                    data-toggle="modal" data-target="{{-- #modal-delete-{{$prod->id_producto}} --}}"><i
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$prod->id_producto}}"><i
                                                         class="bi bi-trash3"></i></button>
                                             </td>
                                             <td>{{ $prod->codigo }}</td>
@@ -89,18 +77,19 @@
                                             <td>{{ $prod->categoria->categoria }}</td>
                                             <td>
                                                 <div class="producto-imagen">
-                                                    <a href="/imagenes/productos/{{ $prod->imagen }}" data-lightbox="producto" data-title="{{ $prod->nombre }}">
-                                                        <img src="/imagenes/productos/{{ $prod->imagen }}" alt="Imagen del producto" class="img-fluid">
+                                                    <a href="/imagenes/productos/{{ $prod->imagen }}"
+                                                        data-lightbox="producto" data-title="{{ $prod->nombre }}">
+                                                        <img src="/imagenes/productos/{{ $prod->imagen }}"
+                                                            alt="Imagen del producto" class="img-fluid">
                                                     </a>
                                                 </div>
                                             </td>
-                                            <td>{{ $prod->estatus }}</td>
+                                            <td>{{ $prod->estatus == 1 ? 'Existencia' : 'Sin Existencia' }}</td>
                                         </tr>
-                                        {{-- @include('almacen.producto.modal') --}} {{-- Se trata de la notificacion para confirmar la eliminacion de una producto --}}
+                                        @include('almacen.producto.modal') {{-- Se trata de la notificacion para confirmar la eliminacion de una producto --}}
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $producto->links() }}
                         </div>
                     </div>
 
